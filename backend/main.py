@@ -111,3 +111,63 @@ say:
         return {
             "error": str(e)
         }
+from pydantic import BaseModel
+
+class BMIRequest(BaseModel):
+    height: float  # in cm
+    weight: float  # in kg
+
+
+@app.post("/bmi")
+def calculate_bmi(data: BMIRequest):
+
+    height_m = data.height / 100
+    bmi = data.weight / (height_m * height_m)
+
+    if bmi < 18.5:
+        category = "Underweight"
+    elif bmi < 25:
+        category = "Normal"
+    elif bmi < 30:
+        category = "Overweight"
+    else:
+        category = "Obese"
+
+    return {
+        "bmi": round(bmi, 2),
+        "category": category
+    }
+class CalorieRequest(BaseModel):
+    age: int
+    gender: str
+    weight: float  # kg
+    height: float  # cm
+    activity_level: str  # sedentary, light, moderate, active
+@app.post("/calories")
+def calculate_calories(data: CalorieRequest):
+
+    # Mifflin-St Jeor Equation
+    if data.gender.lower() == "male":
+        bmr = 10 * data.weight + 6.25 * data.height - 5 * data.age + 5
+    else:
+        bmr = 10 * data.weight + 6.25 * data.height - 5 * data.age - 161
+
+    activity_multipliers = {
+        "sedentary": 1.2,
+        "light": 1.375,
+        "moderate": 1.55,
+        "active": 1.725
+    }
+
+    multiplier = activity_multipliers.get(data.activity_level.lower(), 1.2)
+
+    maintenance_calories = bmr * multiplier
+
+    return {
+        "bmr": round(bmr, 2),
+        "maintenance_calories": round(maintenance_calories, 2),
+        "goal": {
+            "weight_loss": round(maintenance_calories - 500, 2),
+            "weight_gain": round(maintenance_calories + 500, 2)
+        }
+    }

@@ -41,6 +41,31 @@ A full-stack AI-powered nutrition assistant built using React, FastAPI, FAISS, a
 
 ---
 
+
+---
+
+## 📸 Application Screenshots
+
+### 🏠 Home Page
+
+![Home Page](assets/home.png)
+
+### 📊 BMI Calculator
+
+![BMI Calculator](assets/bmi.png)
+
+### 🔥 Calorie Calculator
+
+![Calorie Calculator](assets/calorie.png)
+
+### 🏗️ System Architecture
+
+![System Architecture](assets/architecture.png)
+
+---
+
+
+
 # 🏗️ System Architecture
 
 ```text
